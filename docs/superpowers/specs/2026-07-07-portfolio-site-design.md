@@ -6,7 +6,8 @@ Date: 2026-07-07
 
 A personal portfolio site showcasing resume and projects, self-deployed end-to-end
 (infra, config, CI/CD, hosting) as a hands-on learning exercise and interview talking
-point. Future addition: an AI chatbox that answers visitor questions about Nishtha.
+point. Includes an AI chatbox (Ask tab) that answers visitor questions about Nishtha
+using her resume as context.
 
 ## Goals
 
@@ -15,14 +16,16 @@ point. Future addition: an AI chatbox that answers visitor questions about Nisht
 - Deployment stack demonstrates real infra skills: IaC (Terraform), configuration
   management (Ansible), containerization (Docker), CI/CD (GitHub Actions), CDN/security
   (Cloudflare), and operational concerns (rollback, monitoring, hardening).
-- App structure already accommodates the future AI chatbox without rearchitecture.
+- Ask tab: a simple LLM-backed chatbox that answers questions about Nishtha using her
+  resume as context, on a free-tier LLM API, with no RAG/vector-store infrastructure.
 
 ## Non-Goals
 
 - No CMS or dynamic content editing UI — resume/project data lives in typed data files
   in the repo, edited via git commits.
 - No remote Terraform state/locking — single-VM personal project, local state is fine.
-- The AI chatbox itself is not built in this phase — only a placeholder route/page.
+- No RAG pipeline, vector database, or chunking/retrieval infrastructure for the
+  chatbox — the resume is small enough to pass as full context on every request.
 - No Kubernetes — a single Docker Compose stack on one VM is sufficient at this scale.
 
 ## Architecture
@@ -91,32 +94,54 @@ automatic rollback in this phase.
 nishtha-portfolio/
 ├── app/                          # Next.js App Router
 │   ├── page.tsx                  # "/" → redirects to /resume (default landing tab)
-│   ├── ask/page.tsx              # Ask tab — chatbox UI (placeholder: "Coming soon")
+│   ├── ask/page.tsx              # Ask tab — chatbox UI, calls /api/chat
 │   ├── resume/page.tsx           # Resume tab (default landing route)
 │   ├── portfolio/page.tsx        # Portfolio tab (projects)
 │   ├── layout.tsx                # Shared layout with tab nav: Ask | Resume | Portfolio
-│   └── api/chat/route.ts         # Placeholder API route backing Ask (stub response)
+│   └── api/chat/route.ts         # Calls Gemini API with resume context + user question
 ├── data/
-│   ├── resume.ts                 # Typed resume data (experience, education, skills)
+│   ├── resume.ts                 # Typed resume data (experience, education, skills) —
+│   │                              # single source of truth for both the Resume tab and
+│   │                              # the Ask chatbox's LLM context
 │   └── projects.ts               # Typed project list (title, description, tech, links)
+├── lib/
+│   └── formatResumeForPrompt.ts  # Serializes data/resume.ts into a markdown text block
+│                                  # for the LLM system prompt (no separate context file)
 ├── components/
 │   ├── TabNav.tsx                # Ask / Resume / Portfolio tab switcher
 │   ├── ProjectCard.tsx
-│   └── ResumeSection.tsx
+│   ├── ResumeSection.tsx
+│   └── ChatBox.tsx               # Ask tab's chat UI
 ├── Dockerfile
-├── docker-compose.yml            # references ${IMAGE_TAG}
+├── docker-compose.yml            # references ${IMAGE_TAG}; GEMINI_API_KEY from .env
 ├── terraform/                    # VCN, security list, compute instance, retry-apply.sh
-├── ansible/                      # playbook.yml
+├── ansible/                      # playbook.yml (includes deploying the Vault-encrypted
+│                                  # GEMINI_API_KEY into the VM's .env)
 └── .github/workflows/deploy.yml
 ```
 
 Tab order: **Ask | Resume | Portfolio**. Default route `/` redirects to `/resume`.
-The Ask tab ships as a visible "Coming soon" placeholder (not hidden) so the site's
-navigation and routing already match the final vision; the chatbox slots into the
-existing `api/chat/route.ts` and `ask/page.tsx` later without structural changes.
 
 Content (resume + projects) lives in typed TypeScript data files, edited via git —
 no CMS, no runtime data-fetching for this content.
+
+## AI Chatbox (Ask tab)
+
+- **Model/API**: Google Gemini API free tier (Gemini 2.0/2.5 Flash) — chosen because
+  it's a durable, ongoing free tier (not a trial with an expiry), with a context window
+  far larger than a resume needs, and no RAG/vector-store infra required.
+- **Context strategy**: no RAG. `lib/formatResumeForPrompt.ts` serializes
+  `data/resume.ts` into a markdown text block, included in full as the system prompt on
+  every request, followed by the visitor's question. `data/resume.ts` remains the single
+  source of truth — the Resume tab renders it as UI, the formatter renders it as prompt
+  text, so the two can never drift out of sync.
+- **Request flow**: `ChatBox.tsx` (client) → `POST /api/chat` (Next.js API route) →
+  Gemini API (server-side call, key never exposed to the client) → response streamed/
+  returned to `ChatBox.tsx`.
+- **Secret handling**: `GEMINI_API_KEY` is stored as a GitHub Actions secret, encrypted
+  into an Ansible Vault variable, and deployed into the VM's `.env` file (read by
+  `docker-compose.yml` and injected into the app container as an environment variable).
+  The key never appears in the repo in plaintext or in CI logs.
 
 ## Known Friction Points (called out explicitly, not left as surprises)
 
