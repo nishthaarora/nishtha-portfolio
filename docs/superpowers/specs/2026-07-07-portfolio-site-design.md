@@ -134,10 +134,10 @@ nishtha-portfolio/
 │   └── ChatBox.tsx               # Ask tab's chat UI
 ├── Dockerfile
 ├── docker-compose.yml            # references ${IMAGE_TAG}; GEMINI_API_KEY from .env
-├── terraform/                    # VCN, security list, compute instance, retry-apply.sh
-├── ansible/                      # playbook.yml (includes deploying the Vault-encrypted
-│                                  # GEMINI_API_KEY into the VM's .env)
-└── .github/workflows/deploy.yml
+├── terraform/                    # VCN, security list, compute instance
+├── ansible/                      # playbook.yml (Docker, Nginx, Certbot, DuckDNS, hardening —
+│                                  # does not handle GEMINI_API_KEY; see Secret handling below)
+└── .github/workflows/deploy.yml  # writes GEMINI_API_KEY into the VM's .env on every deploy
 ```
 
 Tab order: **Ask | Resume | Portfolio**. Default route `/` redirects to `/resume`.
@@ -158,10 +158,16 @@ no CMS, no runtime data-fetching for this content.
 - **Request flow**: `ChatBox.tsx` (client) → `POST /api/chat` (Next.js API route) →
   Gemini API (server-side call, key never exposed to the client) → response streamed/
   returned to `ChatBox.tsx`.
-- **Secret handling**: `GEMINI_API_KEY` is stored as a GitHub Actions secret, encrypted
-  into an Ansible Vault variable, and deployed into the VM's `.env` file (read by
-  `docker-compose.yml` and injected into the app container as an environment variable).
-  The key never appears in the repo in plaintext or in CI logs.
+- **Secret handling (2026-07-08 update):** originally designed to flow through Ansible
+  Vault; implemented more simply instead. `GEMINI_API_KEY` is stored only as a GitHub
+  Actions secret. The CI/CD workflow's deploy step writes it directly into the VM's
+  `.env` file on every deploy (`echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >>
+  .env`), which `docker-compose.yml` then injects into the app container. This meets
+  the same goal — never in the repo, never in plaintext in git history or CI logs —
+  with one fewer moving part than Vault. Trade-off: the secret only lands on the VM
+  via a CI/CD deploy, not via the Ansible playbook alone — re-running just `ansible-
+  playbook playbook.yml` (e.g. to reconfigure hardening) does not (re)provision this
+  secret onto a fresh VM by itself.
 
 ## Known Friction Points (called out explicitly, not left as surprises)
 
