@@ -1,0 +1,7 @@
+- name: Configure portfolio VM
+  hosts: portfolio
+  become: true
+
+  tasks:
+    - name: Install Docker
+      import_tasks: tasks/docker.yml
