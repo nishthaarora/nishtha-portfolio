@@ -5,6 +5,8 @@ RUN npm install
 
 FROM node:22-alpine AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_GA_MEASUREMENT_ID
+ENV NEXT_PUBLIC_GA_MEASUREMENT_ID=$NEXT_PUBLIC_GA_MEASUREMENT_ID
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
