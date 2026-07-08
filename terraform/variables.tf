@@ -1,32 +1,24 @@
-variable "tenancy_ocid" {
-  description = "OCI tenancy OCID"
+variable "project_id" {
+  description = "GCP project ID"
   type        = string
-}
-
-variable "user_ocid" {
-  description = "OCI user OCID"
-  type        = string
-}
-
-variable "fingerprint" {
-  description = "Fingerprint of the uploaded API signing key"
-  type        = string
-}
-
-variable "private_key_path" {
-  description = "Path to the OCI API private key (PEM)"
-  type        = string
-  default     = "~/.oci/oci_api_key.pem"
 }
 
 variable "region" {
-  description = "OCI region (e.g. us-chicago-1)"
+  description = "GCP region (must be us-west1, us-central1, or us-east1 for free tier)"
   type        = string
+  default     = "us-central1"
 }
 
-variable "compartment_ocid" {
-  description = "OCI compartment OCID to create resources in"
+variable "zone" {
+  description = "GCP zone within the region"
   type        = string
+  default     = "us-central1-a"
+}
+
+variable "credentials_file" {
+  description = "Path to the GCP service account JSON key"
+  type        = string
+  default     = "~/.gcp/terraform-portfolio-key.json"
 }
 
 variable "ssh_public_key_path" {
