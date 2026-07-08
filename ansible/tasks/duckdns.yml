@@ -1,0 +1,19 @@
+- name: Create duckdns directory
+  file:
+    path: /opt/duckdns
+    state: directory
+    mode: "0755"
+
+- name: Write the DuckDNS update script
+  copy:
+    dest: /opt/duckdns/duck.sh
+    mode: "0700"
+    content: |
+      #!/usr/bin/env bash
+      curl -s "https://www.duckdns.org/update?domains={{ duckdns_subdomain }}&token={{ duckdns_token }}&ip=" > /opt/duckdns/duck.log 2>&1
+
+- name: Schedule the DuckDNS update via cron every 5 minutes
+  cron:
+    name: "Update DuckDNS IP"
+    minute: "*/5"
+    job: "/opt/duckdns/duck.sh"

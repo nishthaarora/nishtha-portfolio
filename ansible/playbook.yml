@@ -2,6 +2,10 @@
   hosts: portfolio
   become: true
 
+  vars:
+    duckdns_subdomain: "nishthaarora"
+    duckdns_token: "{{ lookup('env', 'DUCKDNS_TOKEN') }}"
+
   tasks:
     - name: Install Docker
       import_tasks: tasks/docker.yml
@@ -11,6 +15,9 @@
 
     - name: Install Certbot
       import_tasks: tasks/certbot.yml
+
+    - name: Configure DuckDNS auto-update
+      import_tasks: tasks/duckdns.yml
 
     - name: Apply security hardening
       import_tasks: tasks/hardening.yml
