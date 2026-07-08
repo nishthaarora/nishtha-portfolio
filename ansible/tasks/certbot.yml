@@ -1,0 +1,7 @@
+- name: Install Certbot and the Nginx plugin
+  apt:
+    name:
+      - certbot
+      - python3-certbot-nginx
+    state: present
+    update_cache: true

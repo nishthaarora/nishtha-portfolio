@@ -5,3 +5,9 @@
   tasks:
     - name: Install Docker
       import_tasks: tasks/docker.yml
+
+    - name: Install Nginx
+      import_tasks: tasks/nginx.yml
+
+    - name: Install Certbot
+      import_tasks: tasks/certbot.yml
