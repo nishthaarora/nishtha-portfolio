@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
+header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+main {
+  padding: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
