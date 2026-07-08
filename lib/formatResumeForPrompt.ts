@@ -4,13 +4,17 @@ export function formatResumeForPrompt(): string {
   const experience = resume.experience
     .map(
       (job) =>
-        `- ${job.title} at ${job.company} (${job.start}–${job.end})\n` +
+        `- ${job.title} at ${job.company} (${job.start}–${job.end}, ${job.location})\n` +
         job.highlights.map((h) => `  - ${h}`).join("\n")
     )
     .join("\n");
 
   const education = resume.education
-    .map((edu) => `- ${edu.degree}, ${edu.school} (${edu.year})`)
+    .map((edu) => `- ${edu.degree}, ${edu.school} (${edu.start}–${edu.end})`)
+    .join("\n");
+
+  const skills = resume.skills
+    .map((group) => `- ${group.category}: ${group.items.join(", ")}`)
     .join("\n");
 
   return [
@@ -25,6 +29,6 @@ export function formatResumeForPrompt(): string {
     education,
     "",
     "## Skills",
-    resume.skills.join(", "),
+    skills,
   ].join("\n");
 }
