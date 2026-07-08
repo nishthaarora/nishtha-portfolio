@@ -9,13 +9,13 @@ data "oci_core_images" "ubuntu_arm" {
   operating_system_version = "22.04"
   shape                    = "VM.Standard.A1.Flex"
   sort_by                  = "TIMECREATED"
-  sort_order               = "DESC"
+  sort_order               = "DE
 }
 
 resource "oci_core_instance" "portfolio_vm" {
-  compartment_id      = var.compartment_ocid
+  compartment_id      = var.comp
   availability_domain = data.oci_identity_availability_domain.ad.name
-  display_name        = "portfolio-vm"
+  display_name        = "portfol
   shape                = "VM.Standard.A1.Flex"
 
   shape_config {
@@ -29,7 +29,7 @@ resource "oci_core_instance" "portfolio_vm" {
   }
 
   source_details {
-    source_type             = "image"
+    source_type             = "i
     source_id               = data.oci_core_images.ubuntu_arm.images[0].id
     boot_volume_size_in_gbs = 50
   }
@@ -37,11 +37,4 @@ resource "oci_core_instance" "portfolio_vm" {
   metadata = {
     ssh_authorized_keys = file(var.ssh_public_key_path)
   }
-    source_type             = "image"
-    source_id               = data.oci_core_images.ubuntu_arm.images[0].id
-    boot_volume_size_in_gbs = 50
-  }
-
-  metadata = {
-    ssh_authorized_keys = file(var.ssh_public_key_path)
-  }
+}
