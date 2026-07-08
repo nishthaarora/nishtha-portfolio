@@ -1,79 +1,37 @@
-resource "oci_core_vcn" "portfolio_vcn" {
-  compartment_id = var.compartment_ocid
-  cidr_block     = "10.0.0.0/16"
-  display_name   = "portfolio-vcn"
-  dns_label      = "portfoliovcn"
+resource "google_compute_network" "portfolio_vpc" {
+  name                    = "portfolio-vpc"
+  auto_create_subnetworks = false
 }
 
-resource "oci_core_internet_gateway" "portfolio_igw" {
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.portfolio_vcn.id
-  display_name   = "portfolio-igw"
-  enabled        = true
+resource "google_compute_subnetwork" "portfolio_subnet" {
+  name          = "portfolio-subnet"
+  ip_cidr_range = "10.0.1.0/24"
+  region        = var.region
+  network       = google_compute_network.portfolio_vpc.id
 }
 
-resource "oci_core_route_table" "portfolio_route_table" {
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.portfolio_vcn.id
-  display_name   = "portfolio-route-table"
+resource "google_compute_firewall" "allow_ssh_from_admin" {
+  name    = "allow-ssh-from-admin"
+  network = google_compute_network.portfolio_vpc.id
 
-  route_rules {
-    destination       = "0.0.0.0/0"
-    network_entity_id = oci_core_internet_gateway.portfolio_igw.id
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
   }
+
+  source_ranges = [var.admin_ssh_cidr]
+  target_tags   = ["portfolio-vm"]
 }
 
-resource "oci_core_security_list" "portfolio_security_list" {
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.portfolio_vcn.id
-  display_name   = "portfolio-security-list"
+resource "google_compute_firewall" "allow_http_https_from_cloudflare" {
+  name    = "allow-http-https-from-cloudflare"
+  network = google_compute_network.portfolio_vpc.id
 
-  egress_security_rules {
-    destination = "0.0.0.0/0"
-    protocol    = "all"
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
   }
 
-  ingress_security_rules {
-    source   = var.admin_ssh_cidr
-    protocol = "6" # TCP
-    tcp_options {
-      min = 22
-      max = 22
-    }
-  }
-
-  dynamic "ingress_security_rules" {
-    for_each = var.cloudflare_ipv4_cidrs
-    content {
-      source   = ingress_security_rules.value
-      protocol = "6"
-      tcp_options {
-        min = 80
-        max = 80
-      }
-    }
-  }
-
-  dynamic "ingress_security_rules" {
-    for_each = var.cloudflare_ipv4_cidrs
-    content {
-      source   = ingress_security_rules.value
-      protocol = "6"
-      tcp_options {
-        min = 443
-        max = 443
-      }
-    }
-  }
-}
-
-resource "oci_core_subnet" "portfolio_subnet" {
-  compartment_id             = var.compartment_ocid
-  vcn_id                     = oci_core_vcn.portfolio_vcn.id
-  cidr_block                 = "10.0.1.0/24"
-  display_name               = "portfolio-subnet"
-  dns_label                  = "portfoliosub"
-  route_table_id             = oci_core_route_table.portfolio_route_table.id
-  security_list_ids          = [oci_core_security_list.portfolio_security_list.id]
-  prohibit_public_ip_on_vnic = false
+  source_ranges = var.cloudflare_ipv4_cidrs
+  target_tags   = ["portfolio-vm"]
 }
