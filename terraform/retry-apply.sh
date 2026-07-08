@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MAX_ATTEMPTS=10
+MAX_ATTEMPTS=120
 BASE_DELAY_SECONDS=30
+MAX_DELAY_SECONDS=120
 
 cd "$(dirname "$0")"
 
@@ -17,6 +18,9 @@ while (( attempt <= MAX_ATTEMPTS )); do
 
   if grep -qi "out of host capacity\|outofcapacity" /tmp/tf-apply-output.log; then
     delay=$(( BASE_DELAY_SECONDS * attempt ))
+    if (( delay > MAX_DELAY_SECONDS )); then
+      delay=$MAX_DELAY_SECONDS
+    fi
     echo "Oracle reported insufficient capacity. Retrying in ${delay}s..."
     sleep "${delay}"
     attempt=$(( attempt + 1 ))
