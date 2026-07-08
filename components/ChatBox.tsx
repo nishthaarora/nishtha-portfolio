@@ -25,7 +25,8 @@ export function ChatBox() {
         body: JSON.stringify({ question }),
       });
       const data = await response.json();
-      setMessages([...nextMessages, { role: "assistant", content: data.answer }]);
+      const content = response.ok ? data.answer : data.error;
+      setMessages([...nextMessages, { role: "assistant", content }]);
     } finally {
       setLoading(false);
     }

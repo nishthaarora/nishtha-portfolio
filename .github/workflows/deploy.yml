@@ -100,6 +100,7 @@ jobs:
           script: |
             cd ~/portfolio
             echo "IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}" > .env
+            echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
             docker compose pull
             docker compose up -d
 
