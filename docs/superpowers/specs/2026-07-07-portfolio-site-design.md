@@ -30,14 +30,21 @@ using her resume as context.
 
 ## Architecture
 
+> **Provider note (2026-07-08):** Originally designed for Oracle Cloud's "Always Free"
+> ARM tier. Switched to Google Cloud's free-tier `e2-micro` after persistent,
+> multi-day "out of host capacity" errors provisioning Oracle's ARM shape in
+> `us-chicago-1` (tried multiple availability domains and shape sizes; GCP's free
+> region subscription was also gated behind a paid-tier upgrade on the trial account,
+> unlike GCP which doesn't have this restriction). GCP's `e2-micro` is x86_64, which
+> also removes the ARM cross-compilation step from CI/CD entirely.
+
 ```
 Terraform (provisioning)
-  - Oracle VCN + subnet + security list
+  - GCP VPC + subnet + firewall rules
       - 80/443 open only to Cloudflare's published IP ranges
       - 22 restricted to operator's IP where possible
-  - ARM "Always Free" Compute instance (bare Ubuntu)
-  - retry-apply.sh wraps `terraform apply`, retries on Oracle
-    "Out of host capacity" errors with backoff
+  - "Always Free" e2-micro Compute Engine instance (bare Ubuntu), in a free-tier
+    eligible region (us-west1 / us-central1 / us-east1)
   - Outputs: VM public IP
       │
       ▼
@@ -54,20 +61,20 @@ Ansible (configuration) — playbook run against the Terraform-output IP, idempo
       ▼
 GitHub Actions CI/CD (x86_64 runners) — on push to main
   1. Install deps, lint, typecheck, build
-  2. docker buildx build --platform linux/arm64 (QEMU emulation, cross-compiling
-     for the ARM64 VM from x86_64 runners)
+  2. docker build (native x86_64 — no cross-compilation needed, since both the
+     GitHub runner and the GCP VM are x86_64)
   3. Tag image with both `latest` and the git commit SHA; push both to ghcr.io
   4. SSH deploy: set IMAGE_TAG=<sha> in .env on VM → docker compose pull && up -d
       │
       ▼
-Oracle VM
+GCP VM
   - App container (restart: unless-stopped) + Nginx + Let's Encrypt TLS
   - UptimeRobot free ping against the public URL for basic monitoring
       │
       ▼
 Cloudflare (free tier, proxied, SSL mode: Full (strict))
   - Hides VM's real IP, free DDoS protection, caches static assets
-  - Terraform's security list allows 80/443 only from Cloudflare's IP ranges
+  - Terraform's firewall rules allow 80/443 only from Cloudflare's IP ranges
       │
       ▼
 Domain (Cloudflare DNS) → Cloudflare edge → VM
@@ -145,11 +152,11 @@ no CMS, no runtime data-fetching for this content.
 
 ## Known Friction Points (called out explicitly, not left as surprises)
 
-- **Oracle free-tier VM provisioning**: ARM capacity is often unavailable in popular
-  regions; `retry-apply.sh` retries with backoff. May still require manual region
-  changes if retries exhaust.
-- **ARM64 cross-compilation**: GitHub's free runners are x86_64; images are built for
-  `linux/arm64` via `docker buildx` + QEMU emulation. Slower builds, but zero extra cost.
+- **GCP free-tier region/zone restriction**: the `e2-micro` Always Free instance is
+  only free in specific regions (`us-west1`, `us-central1`, `us-east1`) — provisioning
+  outside those incurs cost. Terraform's region variable defaults to one of these.
+- **Historical note**: this project originally targeted Oracle Cloud's ARM "Always
+  Free" tier; see the Architecture section's provider note for why it moved to GCP.
 - **VM reboot survival**: `restart: unless-stopped` in Docker Compose ensures the app
   container comes back up after host reboots/patching.
 
