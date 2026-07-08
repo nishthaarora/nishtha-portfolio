@@ -3,6 +3,7 @@
   become: true
 
   vars:
+    site_domain: "nishthaarora.duckdns.org"
     duckdns_subdomain: "nishthaarora"
     duckdns_token: "{{ lookup('env', 'DUCKDNS_TOKEN') }}"
 
