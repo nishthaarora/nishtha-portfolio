@@ -61,6 +61,34 @@ jobs:
     needs: build-and-push
     runs-on: ubuntu-latest
     steps:
+      - name: Get GitHub runner's public IP
+        id: runner_ip
+        run: echo "ip=$(curl -s https://api.ipify.org)" >> "$GITHUB_OUTPUT"
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Open temporary SSH firewall rule for this runner
+        run: |
+          gcloud compute firewall-rules create allow-ssh-from-ci-temp \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --network=portfolio-vpc \
+            --direction=INGRESS \
+            --action=ALLOW \
+            --rules=tcp:22 \
+            --source-ranges=${{ steps.runner_ip.outputs.ip }}/32 \
+            --target-tags=portfolio-vm \
+            --quiet || \
+          gcloud compute firewall-rules update allow-ssh-from-ci-temp \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --source-ranges=${{ steps.runner_ip.outputs.ip }}/32 \
+            --quiet
+
       - name: Deploy to VM over SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -72,3 +100,10 @@ jobs:
             echo "IMAGE_TAG=${{ needs.build-and-push.outputs.image_tag }}" > .env
             docker compose pull
             docker compose up -d
+
+      - name: Close temporary SSH firewall rule
+        if: always()
+        run: |
+          gcloud compute firewall-rules delete allow-ssh-from-ci-temp \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --quiet
