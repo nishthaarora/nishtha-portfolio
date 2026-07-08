@@ -1,15 +1,48 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --border: #e2e2e2;
+  --card-bg: #ffffff;
+  --link: #0060df;
+  --input-bg: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --fg: #e8e8e8;
+    --border: #333333;
+    --card-bg: #1c1c1c;
+    --link: #6ab0ff;
+    --input-bg: #1c1c1c;
+  }
+}
+
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+a {
+  color: var(--link);
 }
 
 header {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e2e2e2;
+  border-bottom: 1px solid var(--border);
 }
 
 main {
   padding: 1.5rem;
   max-width: 800px;
   margin: 0 auto;
+}
+
+input,
+button {
+  background: var(--input-bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
 }
