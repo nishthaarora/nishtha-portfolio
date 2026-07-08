@@ -1,3 +1,8 @@
+resource "google_compute_address" "portfolio_static_ip" {
+  name   = "portfolio-static-ip"
+  region = var.region
+}
+
 resource "google_compute_instance" "portfolio_vm" {
   name         = "portfolio-vm"
   machine_type = "e2-micro"
@@ -15,7 +20,9 @@ resource "google_compute_instance" "portfolio_vm" {
   network_interface {
     network    = google_compute_network.portfolio_vpc.name
     subnetwork = google_compute_subnetwork.portfolio_subnet.id
-    access_config {} # ephemeral public IP
+    access_config {
+      nat_ip = google_compute_address.portfolio_static_ip.address
+    }
   }
 
   metadata = {

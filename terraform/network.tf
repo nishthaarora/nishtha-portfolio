@@ -23,8 +23,8 @@ resource "google_compute_firewall" "allow_ssh_from_admin" {
   target_tags   = ["portfolio-vm"]
 }
 
-resource "google_compute_firewall" "allow_http_https_from_cloudflare" {
-  name    = "allow-http-https-from-cloudflare"
+resource "google_compute_firewall" "allow_http_https" {
+  name    = "allow-http-https"
   network = google_compute_network.portfolio_vpc.id
 
   allow {
@@ -32,6 +32,6 @@ resource "google_compute_firewall" "allow_http_https_from_cloudflare" {
     ports    = ["80", "443"]
   }
 
-  source_ranges = var.cloudflare_ipv4_cidrs
+  source_ranges = ["0.0.0.0/0"]
   target_tags   = ["portfolio-vm"]
 }
