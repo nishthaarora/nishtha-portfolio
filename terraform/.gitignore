@@ -3,3 +3,4 @@ terraform.tfvars
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+*.json
