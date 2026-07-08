@@ -38,19 +38,36 @@ using her resume as context.
 > unlike GCP which doesn't have this restriction). GCP's `e2-micro` is x86_64, which
 > also removes the ARM cross-compilation step from CI/CD entirely.
 
+> **Domain/CDN note (2026-07-08):** Originally designed around a paid custom domain
+> behind Cloudflare (free tier, proxied). Since a paid domain wasn't wanted, switched
+> to DuckDNS (a free dynamic-DNS subdomain, e.g. `nishtha.duckdns.org`) pointing
+> directly at the VM's IP. This means **no CDN/DDoS/IP-hiding layer** — that trade-off
+> was made explicitly, not overlooked. Real TLS is still obtained via Certbot/Let's
+> Encrypt directly against the DuckDNS domain (Let's Encrypt works with any resolvable
+> domain, not just Cloudflare-proxied ones). The firewall widens from
+> "80/443 only from Cloudflare's ranges" to "80/443 from anywhere" as a direct
+> consequence — defense against direct exposure now relies on Nginx + Certbot TLS,
+> ufw, and fail2ban alone, without Cloudflare's edge layer in front.
+
 ```
 Terraform (provisioning)
   - GCP VPC + subnet + firewall rules
-      - 80/443 open only to Cloudflare's published IP ranges
+      - 80/443 open to the public internet (0.0.0.0/0) — required since there's no
+        Cloudflare edge to restrict traffic to; Nginx + Certbot TLS, ufw, and
+        fail2ban are the actual protection layers now
       - 22 restricted to operator's IP where possible
   - "Always Free" e2-micro Compute Engine instance (bare Ubuntu), in a free-tier
     eligible region (us-west1 / us-central1 / us-east1)
+  - A reserved static external IP (still free while attached to a running instance)
+    so the DuckDNS record doesn't go stale if the VM restarts
   - Outputs: VM public IP
       │
       ▼
 Ansible (configuration) — playbook run against the Terraform-output IP, idempotent
   - Installs Docker + Docker Compose
-  - Installs Nginx + Certbot (Let's Encrypt) as reverse proxy / TLS termination
+  - Installs Nginx as a reverse proxy to the app container (localhost:3000)
+  - Installs Certbot; a cron job on the VM keeps DuckDNS's A record pointed at the
+    VM's IP even if it ever changes
   - Deploys docker-compose.yml / systemd unit for the app container
   - Hardening:
       - SSH key-only auth (PasswordAuthentication no)
@@ -64,7 +81,8 @@ GitHub Actions CI/CD (x86_64 runners) — on push to main
   2. docker build (native x86_64 — no cross-compilation needed, since both the
      GitHub runner and the GCP VM are x86_64)
   3. Tag image with both `latest` and the git commit SHA; push both to ghcr.io
-  4. SSH deploy: set IMAGE_TAG=<sha> in .env on VM → docker compose pull && up -d
+  4. Dynamically open the VM's SSH port for the GitHub runner's IP, deploy, close it
+  5. SSH deploy: set IMAGE_TAG=<sha> in .env on VM → docker compose pull && up -d
       │
       ▼
 GCP VM
@@ -72,20 +90,15 @@ GCP VM
   - UptimeRobot free ping against the public URL for basic monitoring
       │
       ▼
-Cloudflare (free tier, proxied, SSL mode: Full (strict))
-  - Hides VM's real IP, free DDoS protection, caches static assets
-  - Terraform's firewall rules allow 80/443 only from Cloudflare's IP ranges
-      │
-      ▼
-Domain (Cloudflare DNS) → Cloudflare edge → VM
-  - Free subdomain to start; custom domain (~$10-15/yr) addable later via same DNS setup
+DuckDNS (free dynamic DNS) — nishtha.duckdns.org → VM's public IP directly
+  - No proxying, no CDN, no DDoS layer — a direct A record to the VM
 ```
 
 **Division of responsibility:**
 - Terraform = infrastructure existence (VM, network, firewall shape)
 - Ansible = infrastructure configuration (what's installed/hardened on the VM)
 - GitHub Actions = application build & deployment (what's running, and which version)
-- Cloudflare = edge protection (DDoS, IP hiding, caching)
+- DuckDNS = just a hostname pointing at the VM — no edge protection role
 
 **Rollback:** `docker-compose.yml` references `${IMAGE_TAG}` rather than a hardcoded
 tag. To roll back, SSH into the VM, set `IMAGE_TAG` to a previous commit SHA in `.env`,
