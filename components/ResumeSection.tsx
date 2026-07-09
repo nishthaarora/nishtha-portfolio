@@ -93,7 +93,10 @@ export function ResumeSection() {
       </div>
 
       <p style={{ opacity: 0.85, marginTop: "1.25rem" }}>
-        {resume.contact.email} · {resume.contact.linkedin}
+        <a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a> ·{" "}
+        <a href={`https://${resume.contact.linkedin}`} target="_blank" rel="noreferrer">
+          {resume.contact.linkedin}
+        </a>
       </p>
 
       <SectionHeading>Experience</SectionHeading>
