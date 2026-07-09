@@ -1,64 +1,163 @@
 import { resume } from "@/data/resume";
 import { projects } from "@/data/projects";
 
+const THREAD_COLORS: Record<string, { fg: string; bg: string }> = {
+  "frontend-engineering": { fg: "var(--thread-frontend)", bg: "var(--thread-frontend-bg)" },
+  "ai-agent-development": { fg: "var(--thread-ai)", bg: "var(--thread-ai-bg)" },
+  "team-leadership": { fg: "var(--thread-leadership)", bg: "var(--thread-leadership-bg)" },
+};
+
+function Pill({
+  children,
+  anchorId,
+  href,
+}: {
+  children: React.ReactNode;
+  anchorId: string;
+  href?: string;
+}) {
+  const color = THREAD_COLORS[anchorId] ?? { fg: "var(--link)", bg: "var(--card-bg)" };
+  const Tag = href ? "a" : "span";
+  return (
+    <Tag
+      href={href}
+      style={{
+        display: "inline-block",
+        color: color.fg,
+        background: color.bg,
+        border: `1px solid ${color.fg}`,
+        borderRadius: 16,
+        padding: "0.25rem 0.75rem",
+        fontSize: "0.85rem",
+        fontWeight: 600,
+        textDecoration: "none",
+        marginRight: "0.5rem",
+        marginBottom: "0.5rem",
+      }}
+    >
+      {children}
+    </Tag>
+  );
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h3
+      style={{
+        textTransform: "uppercase",
+        letterSpacing: "0.08em",
+        fontSize: "0.85rem",
+        fontWeight: 700,
+        color: "var(--link)",
+        marginTop: "2rem",
+        marginBottom: "0.75rem",
+      }}
+    >
+      {children}
+    </h3>
+  );
+}
+
 export function ResumeSection() {
   return (
     <div>
-      <h1 style={{ marginBottom: 0 }}>{resume.name}</h1>
+      <h1 style={{ marginBottom: 0, fontSize: "2rem" }}>{resume.name}</h1>
       <p style={{ margin: "0.25rem 0 1rem", opacity: 0.85 }}>
         {resume.title} | {resume.contact.location}
       </p>
       <p>{resume.summary}</p>
 
-      <p>
-        <strong>Core strengths: </strong>
-        {resume.coreStrengths.map((strength, index) => (
-          <span key={strength.anchorId}>
-            {index > 0 && " · "}
-            <a href={`#${strength.anchorId}`}>{strength.label}</a>
-          </span>
+      <div style={{ marginTop: "0.75rem" }}>
+        {resume.coreStrengths.map((strength) => (
+          <Pill key={strength.anchorId} anchorId={strength.anchorId} href={`#${strength.anchorId}`}>
+            {strength.label}
+          </Pill>
         ))}
-      </p>
+      </div>
 
-      <p style={{ opacity: 0.85 }}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          marginTop: "1.25rem",
+        }}
+      >
+        {resume.stats.map((stat) => (
+          <div
+            key={stat.label}
+            style={{
+              flex: "1 1 100px",
+              textAlign: "center",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              padding: "0.75rem 0.5rem",
+            }}
+          >
+            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--link)" }}>
+              {stat.value}
+            </div>
+            <div style={{ fontSize: "0.75rem", opacity: 0.75 }}>{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <p style={{ opacity: 0.85, marginTop: "1.25rem" }}>
         {resume.contact.email} · {resume.contact.linkedin}
       </p>
 
-      <h3>Experience</h3>
-      {resume.experience.map((job) => (
-        <div key={`${job.company}-${job.title}`} style={{ marginBottom: "1.25rem" }}>
-          <strong>
-            {job.title} — {job.company}, {job.location}
-          </strong>
-          <br />
-          <span style={{ opacity: 0.75 }}>
-            {job.start} – {job.end}
-            {job.promotionNote && ` (${job.promotionNote})`}
-          </span>
+      <SectionHeading>Experience</SectionHeading>
+      {resume.experience.map((job, index) => (
+        <div key={`${job.company}-${job.title}`} style={{ display: "flex", gap: "1rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                background: "var(--link)",
+                marginTop: 6,
+                flexShrink: 0,
+              }}
+            />
+            {index < resume.experience.length - 1 && (
+              <div style={{ flex: 1, width: 2, background: "var(--border)" }} />
+            )}
+          </div>
 
-          {job.sections ? (
-            job.sections.map((section) => (
-              <div key={section.anchorId} id={section.anchorId} style={{ marginTop: "0.75rem" }}>
-                <strong>
-                  {section.category}
-                  {section.note && ` (${section.note})`}
-                </strong>
-                <ul>
-                  {section.highlights.map((highlight) => (
-                    <li key={highlight}>{highlight}</li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <ul>
-              {job.highlights?.map((highlight) => <li key={highlight}>{highlight}</li>)}
-            </ul>
-          )}
+          <div style={{ flex: 1, paddingBottom: "1.5rem" }}>
+            <div style={{ fontSize: "1.15rem", fontWeight: 700 }}>
+              {job.title} — {job.company}, {job.location}
+            </div>
+            <div style={{ opacity: 0.75, marginBottom: "0.75rem" }}>
+              {job.start} – {job.end}
+              {job.promotionNote && ` (${job.promotionNote})`}
+            </div>
+
+            {job.sections ? (
+              job.sections.map((section) => (
+                <div key={section.anchorId} id={section.anchorId} style={{ marginBottom: "1rem" }}>
+                  <Pill anchorId={section.anchorId}>
+                    {section.category}
+                    {section.note && ` · ${section.note}`}
+                  </Pill>
+                  <ul style={{ marginTop: "0.5rem" }}>
+                    {section.highlights.map((highlight) => (
+                      <li key={highlight}>{highlight}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <ul>
+                {job.highlights?.map((highlight) => <li key={highlight}>{highlight}</li>)}
+              </ul>
+            )}
+          </div>
         </div>
       ))}
 
-      <h3>AI & Agent Projects</h3>
+      <SectionHeading>AI &amp; Agent Projects</SectionHeading>
       {projects.map((project) => (
         <div key={project.title} style={{ marginBottom: "1rem" }}>
           <strong>{project.title}</strong> — {project.description}
@@ -70,14 +169,14 @@ export function ResumeSection() {
         </div>
       ))}
 
-      <h3>Skills</h3>
+      <SectionHeading>Skills</SectionHeading>
       {resume.skills.map((group) => (
         <p key={group.category}>
           <strong>{group.category}:</strong> {group.items.join(", ")}
         </p>
       ))}
 
-      <h3>Education</h3>
+      <SectionHeading>Education</SectionHeading>
       <ul>
         {resume.education.map((edu) => (
           <li key={`${edu.school}-${edu.degree}`}>

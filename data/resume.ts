@@ -34,6 +34,11 @@ export type CoreStrength = {
   anchorId: string;
 };
 
+export type Stat = {
+  value: string;
+  label: string;
+};
+
 export type Resume = {
   name: string;
   title: string;
@@ -44,6 +49,7 @@ export type Resume = {
   };
   summary: string;
   coreStrengths: CoreStrength[];
+  stats: Stat[];
   experience: ResumeExperience[];
   education: ResumeEducation[];
   skills: SkillGroup[];
@@ -64,6 +70,13 @@ export const resume: Resume = {
     { label: "AI & Agent Development", anchorId: "ai-agent-development" },
     { label: "Team Leadership", anchorId: "team-leadership" },
   ],
+  stats: [
+    { value: "8+", label: "years experience" },
+    { value: "84", label: "components migrated" },
+    { value: "10+", label: "product teams served" },
+    { value: "85%", label: "critical-path test coverage" },
+    { value: "4x", label: "fewer deploy failures" },
+  ],
   experience: [
     {
       title: "Senior Software Engineer",
@@ -75,7 +88,6 @@ export const resume: Resume = {
         {
           category: "Team Leadership",
           anchorId: "team-leadership",
-          note: "December 2025 – Present",
           highlights: [
             "Own sprint planning, backlog grooming, and retrospectives, driving team execution rhythm and surfacing technical risk early",
             "Serve as the primary cross-functional point of contact with product and design, aligning feature scope and roadmap phases with engineering capacity",

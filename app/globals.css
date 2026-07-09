@@ -6,6 +6,12 @@
   --card-bg: #ffffff;
   --link: #0060df;
   --input-bg: #ffffff;
+  --thread-frontend: #0060df;
+  --thread-frontend-bg: rgba(0, 96, 223, 0.1);
+  --thread-ai: #8a3ffc;
+  --thread-ai-bg: rgba(138, 63, 252, 0.1);
+  --thread-leadership: #0f9d58;
+  --thread-leadership-bg: rgba(15, 157, 88, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,6 +23,12 @@
     --card-bg: #181a20;
     --link: #6ab0ff;
     --input-bg: #1c1c1c;
+    --thread-frontend: #6ab0ff;
+    --thread-frontend-bg: rgba(106, 176, 255, 0.15);
+    --thread-ai: #b794f6;
+    --thread-ai-bg: rgba(183, 148, 246, 0.15);
+    --thread-leadership: #4ade80;
+    --thread-leadership-bg: rgba(74, 222, 128, 0.15);
   }
 }
 
