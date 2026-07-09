@@ -6,8 +6,7 @@ export function ResumeSection() {
       <h1>{resume.name}</h1>
       <h2>{resume.title}</h2>
       <p>
-        {resume.contact.phone} · {resume.contact.email} · {resume.contact.linkedin} ·{" "}
-        {resume.contact.location}
+        {resume.contact.email} · {resume.contact.linkedin} · {resume.contact.location}
       </p>
       <p>{resume.summary}</p>
 

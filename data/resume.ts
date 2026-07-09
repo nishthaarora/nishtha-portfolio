@@ -23,7 +23,6 @@ export type Resume = {
   name: string;
   title: string;
   contact: {
-    phone: string;
     email: string;
     linkedin: string;
     location: string;
@@ -38,7 +37,6 @@ export const resume: Resume = {
   name: "Nishtha Arora",
   title: "Senior Software Engineer",
   contact: {
-    phone: "512-960-5457",
     email: "nishtha.arora26@gmail.com",
     linkedin: "linkedin.com/in/nishthaarora",
     location: "TX",
