@@ -1,78 +1,16 @@
+import Image from "next/image";
 import { resume } from "@/data/resume";
 import { projects } from "@/data/projects";
+import { Pill } from "@/components/Pill";
+import { boldKeyTerms } from "@/lib/boldKeyTerms";
 
-const THREAD_COLORS: Record<string, { fg: string; bg: string }> = {
-  "frontend-engineering": { fg: "var(--thread-frontend)", bg: "var(--thread-frontend-bg)" },
-  "ai-agent-development": { fg: "var(--thread-ai)", bg: "var(--thread-ai-bg)" },
-  "team-leadership": { fg: "var(--thread-leadership)", bg: "var(--thread-leadership-bg)" },
-};
-
-const SKILL_CATEGORY_ANCHOR: Record<string, string> = {
+const SKILL_CATEGORY_COLOR: Record<string, string> = {
   Frontend: "frontend-engineering",
   "AI & Automation": "ai-agent-development",
   Leadership: "team-leadership",
+  "Testing & Observability": "testing",
+  Platform: "platform",
 };
-
-const KEY_TERMS = [
-  "LangChain",
-  "ChromaDB",
-  "Bedrock",
-  "FastAPI",
-  "FastMCP",
-  "MCP",
-  "Titan",
-  "Claude Code",
-  "Claude SDK",
-  "Claude",
-  "Gemini",
-  "Cursor",
-  "GitHub",
-].sort((a, b) => b.length - a.length);
-
-const KEY_TERMS_PATTERN = new RegExp(
-  `(${KEY_TERMS.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
-  "g"
-);
-
-function boldKeyTerms(text: string): React.ReactNode {
-  const parts = text.split(KEY_TERMS_PATTERN);
-  return parts.map((part, i) =>
-    KEY_TERMS.includes(part) ? <strong key={i}>{part}</strong> : part
-  );
-}
-
-function Pill({
-  children,
-  anchorId,
-  href,
-}: {
-  children: React.ReactNode;
-  anchorId?: string;
-  href?: string;
-}) {
-  const color = (anchorId && THREAD_COLORS[anchorId]) || { fg: "var(--fg)", bg: "var(--input-bg)" };
-  const Tag = href ? "a" : "span";
-  return (
-    <Tag
-      href={href}
-      style={{
-        display: "inline-block",
-        color: color.fg,
-        background: color.bg,
-        border: `1px solid ${anchorId && THREAD_COLORS[anchorId] ? color.fg : "var(--border)"}`,
-        borderRadius: 16,
-        padding: "0.25rem 0.75rem",
-        fontSize: "0.85rem",
-        fontWeight: 600,
-        textDecoration: "none",
-        marginRight: "0.5rem",
-        marginBottom: "0.5rem",
-      }}
-    >
-      {children}
-    </Tag>
-  );
-}
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -95,17 +33,33 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 export function ResumeSection() {
   return (
     <div className="resume-card">
-      <h1 style={{ marginBottom: 0, fontSize: "2rem" }}>{resume.name}</h1>
-      <p style={{ margin: "0.25rem 0 1rem", opacity: 0.85 }}>
-        {resume.title} | {resume.contact.location}
-      </p>
-      <div className="prose">
+      <div style={{ display: "flex", gap: "1.25rem", alignItems: "center" }}>
+        <Image
+          src="/headshot.jpg"
+          alt={resume.name}
+          width={64}
+          height={64}
+          style={{
+            borderRadius: "50%",
+            objectFit: "cover",
+            boxShadow: "0 0 0 3px var(--link)",
+          }}
+        />
+        <div>
+          <h1 style={{ margin: 0, fontSize: "2rem" }}>{resume.name}</h1>
+          <p style={{ margin: "0.25rem 0 0", opacity: 0.85 }}>
+            {resume.title} | {resume.contact.location}
+          </p>
+        </div>
+      </div>
+
+      <div className="prose" style={{ marginTop: "1rem" }}>
         <p>{resume.summary}</p>
       </div>
 
       <div style={{ marginTop: "0.75rem" }}>
         {resume.coreStrengths.map((strength) => (
-          <Pill key={strength.anchorId} anchorId={strength.anchorId} href={`#${strength.anchorId}`}>
+          <Pill key={strength.anchorId} colorKey={strength.anchorId} href={`#${strength.anchorId}`}>
             {strength.label}
           </Pill>
         ))}
@@ -203,7 +157,7 @@ export function ResumeSection() {
             {job.sections ? (
               job.sections.map((section) => (
                 <div key={section.anchorId} id={section.anchorId} style={{ marginBottom: "1rem" }}>
-                  <Pill anchorId={section.anchorId}>
+                  <Pill colorKey={section.anchorId}>
                     {section.category}
                     {section.note && ` · ${section.note}`}
                   </Pill>
@@ -243,7 +197,7 @@ export function ResumeSection() {
           <div style={{ fontWeight: 600, marginBottom: "0.4rem" }}>{group.category}</div>
           <div>
             {group.items.map((item) => (
-              <Pill key={item} anchorId={SKILL_CATEGORY_ANCHOR[group.category]}>
+              <Pill key={item} colorKey={SKILL_CATEGORY_COLOR[group.category]}>
                 {item}
               </Pill>
             ))}

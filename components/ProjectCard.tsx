@@ -1,4 +1,6 @@
 import type { Project } from "@/data/projects";
+import { Pill } from "@/components/Pill";
+import { boldKeyTerms } from "@/lib/boldKeyTerms";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
@@ -14,14 +16,22 @@ export function ProjectCard({ project }: { project: Project }) {
       <p>{project.description}</p>
       <ul>
         {project.highlights.map((highlight) => (
-          <li key={highlight}>{highlight}</li>
+          <li key={highlight}>{boldKeyTerms(highlight)}</li>
         ))}
       </ul>
-      <p>{project.tech.join(", ")}</p>
-      {project.link && (
+      <div>
+        {project.tech.map((tech) => (
+          <Pill key={tech}>{tech}</Pill>
+        ))}
+      </div>
+      {project.link ? (
         <a href={project.link} target="_blank" rel="noreferrer">
-          View project
+          View code →
         </a>
+      ) : (
+        <p style={{ opacity: 0.75, fontStyle: "italic" }}>
+          Private repository — happy to walk through the code on a call.
+        </p>
       )}
     </div>
   );

@@ -12,6 +12,10 @@
   --thread-ai-bg: rgba(138, 63, 252, 0.1);
   --thread-leadership: #0f9d58;
   --thread-leadership-bg: rgba(15, 157, 88, 0.1);
+  --thread-testing: #b45309;
+  --thread-testing-bg: rgba(180, 83, 9, 0.1);
+  --thread-platform: #0e7490;
+  --thread-platform-bg: rgba(14, 116, 144, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -29,6 +33,10 @@
     --thread-ai-bg: rgba(183, 148, 246, 0.15);
     --thread-leadership: #4ade80;
     --thread-leadership-bg: rgba(74, 222, 128, 0.15);
+    --thread-testing: #f5a623;
+    --thread-testing-bg: rgba(245, 166, 35, 0.15);
+    --thread-platform: #22d3ee;
+    --thread-platform-bg: rgba(34, 211, 238, 0.15);
   }
 }
 
