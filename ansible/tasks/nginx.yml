@@ -10,11 +10,12 @@
     state: started
     enabled: true
 
-- name: Configure the request-rate-limit zone (must live in the http context)
+- name: Configure the request-rate-limit zones (must live in the http context)
   copy:
     dest: /etc/nginx/conf.d/rate-limit.conf
     content: |
       limit_req_zone $binary_remote_addr zone=portfolio_limit:10m rate=10r/s;
+      limit_req_zone $binary_remote_addr zone=chat_limit:10m rate=6r/m;
   notify: Reload nginx
 
 - name: Configure Nginx as a reverse proxy to the app container
@@ -24,6 +25,15 @@
       server {
           listen 80;
           server_name {{ site_domain }};
+
+          location /api/chat {
+              limit_req zone=chat_limit burst=3 nodelay;
+              proxy_pass http://localhost:3000;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+          }
 
           location / {
               limit_req zone=portfolio_limit burst=20 nodelay;
