@@ -70,7 +70,7 @@ export const resume: Resume = {
     location: "Frisco, TX",
   },
   summary:
-    "Senior Software Engineer with 8+ years building scalable frontend platforms and, more recently, AI-native developer tooling and agentic systems. Experience spans architecting shared React design systems, building production RAG pipelines and tool-calling agents on AWS Bedrock, and — since late 2025 — taking on direct engineering leadership scope including sprint planning, cross-functional ownership, and mentoring.",
+    "Senior Software Engineer with 8+ years building scalable frontend platforms and, more recently, AI-native developer tooling and agentic systems. Experience spans architecting shared React design systems, building production RAG pipelines and tool-calling agents on AWS Bedrock, and stepping in as acting manager, taking on sprint planning, cross-functional ownership, and mentoring.",
   coreStrengths: [
     { label: "Frontend Engineering", anchorId: "frontend-engineering" },
     { label: "AI & Agent Development", anchorId: "ai-agent-development" },
@@ -95,9 +95,7 @@ export const resume: Resume = {
           category: "Team Leadership",
           anchorId: "team-leadership",
           highlights: [
-            "Own sprint planning, backlog grooming, and retrospectives, driving team execution rhythm and surfacing technical risk early",
-            "Serve as the primary cross-functional point of contact with product and design, aligning feature scope and roadmap phases with engineering capacity",
-            "Contribute input on performance review conversations and growth coaching for junior and mid-level engineers",
+            "Stepped in as acting manager, running sprint planning, backlog grooming, and retrospectives, and serving as the primary point of contact with product and design on feature scope and roadmap phases. Continue applying these leadership responsibilities today, alongside growth coaching for junior and mid-level engineers.",
           ],
         },
         {
@@ -115,7 +113,7 @@ export const resume: Resume = {
           anchorId: "frontend-engineering",
           highlights: [
             "Set React/TypeScript architecture patterns and led migration of 84 components into a unified design system (Flow), documented in Storybook; mentored 3 engineers",
-            "Streamlined CI/CD pipelines and ArgoCD workflows — deployment failures dropped from weekly to roughly once a month",
+            "Streamlined CI/CD pipelines and ArgoCD workflows, cutting deployment failures from weekly to roughly once a month",
             "Applied AWS/S3 to cloud infrastructure and data ingestion workflows, improving data availability",
           ],
         },
@@ -133,7 +131,7 @@ export const resume: Resume = {
       ],
       highlights: [
         "Architected and owned the shared React component library used across 10+ product teams",
-        "Rolled out Datadog RUM to establish real performance baselines across the platform — shifted the team from guesswork to data-driven decisions",
+        "Rolled out Datadog RUM to establish real performance baselines across the platform, shifting the team from guesswork to data-driven decisions",
         "Wrote and championed Cypress integration tests, growing critical-path coverage from near zero to roughly 85%",
         "Led a customer-facing onboarding revamp attributed with a ~15% lift in product adoption; cleared a backlog of 100+ bugs ahead of SLA deadlines",
       ],
@@ -178,7 +176,7 @@ export const resume: Resume = {
         "Mentoring",
         "Sprint Planning & Grooming",
         "Cross-Functional Communication",
-        "Performance Review Input",
+        "Growth Coaching",
         "Architecture Standards",
         "Agile/SDLC",
       ],
