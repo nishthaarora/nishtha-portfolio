@@ -79,7 +79,7 @@ export const resume: Resume = {
   stats: [
     { value: "8+", label: "years experience" },
     { value: "84", label: "components migrated" },
-    { value: "10+", label: "product teams served" },
+    { value: "3+", label: "teams served" },
     { value: "85%", label: "critical-path test coverage" },
     { value: "4x", label: "fewer deploy failures" },
   ],
@@ -130,7 +130,7 @@ export const resume: Resume = {
         { title: "Frontend Developer", start: "September 2020", end: "January 2024" },
       ],
       highlights: [
-        "Architected and owned the shared React component library used across 10+ product teams",
+        "Architected and owned the shared React component library used across 3+ teams",
         "Rolled out Datadog RUM to establish real performance baselines across the platform, shifting the team from guesswork to data-driven decisions",
         "Wrote and championed Cypress integration tests, growing critical-path coverage from near zero to roughly 85%",
         "Led a customer-facing onboarding revamp attributed with a ~15% lift in product adoption; cleared a backlog of 100+ bugs ahead of SLA deadlines",
