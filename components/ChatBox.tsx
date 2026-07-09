@@ -5,10 +5,10 @@ import { useRef, useState } from "react";
 type Message = { role: "user" | "assistant"; content: string };
 
 const EXAMPLE_PROMPTS = [
-  "What has she built recently?",
-  "What's her AI agent experience?",
-  "What companies has she worked at?",
-  "How do I contact her?",
+  "What have you built recently?",
+  "What's your AI agent experience?",
+  "What companies have you worked at?",
+  "How do I contact you?",
 ];
 
 export function ChatBox() {
@@ -76,17 +76,42 @@ export function ChatBox() {
         </div>
       )}
 
-      <div role="log" aria-live="polite" aria-label="Chat messages">
+      <div
+        role="log"
+        aria-live="polite"
+        aria-label="Chat messages"
+        style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem" }}
+      >
         {messages.map((message, index) => (
-          <p key={index}>
-            <strong>{message.role === "user" ? "You" : "Assistant"}:</strong>{" "}
+          <div
+            key={index}
+            style={{
+              alignSelf: message.role === "user" ? "flex-end" : "flex-start",
+              maxWidth: "85%",
+              background: message.role === "user" ? "var(--link)" : "var(--input-bg)",
+              color: message.role === "user" ? "#ffffff" : "var(--fg)",
+              border: message.role === "assistant" ? "1px solid var(--border)" : "none",
+              borderRadius: 12,
+              padding: "0.6rem 0.9rem",
+            }}
+          >
             {message.content}
-          </p>
+          </div>
         ))}
         {loading && (
-          <p aria-hidden="true">
-            <strong>Assistant:</strong> …
-          </p>
+          <div
+            aria-hidden="true"
+            style={{
+              alignSelf: "flex-start",
+              background: "var(--input-bg)",
+              border: "1px solid var(--border)",
+              borderRadius: 12,
+              padding: "0.6rem 0.9rem",
+              opacity: 0.7,
+            }}
+          >
+            …
+          </div>
         )}
       </div>
 
