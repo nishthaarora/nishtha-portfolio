@@ -207,7 +207,18 @@ export const resume: Resume = {
     },
     {
       category: "Platform",
-      items: ["Node.js", "FastAPI", "AWS (S3, Lambda, Bedrock)", "Docker", "ArgoCD", "GitHub Actions", "SQL"],
+      items: [
+        "Node.js",
+        "Python",
+        "Django",
+        "FastAPI",
+        "PostgreSQL",
+        "AWS (S3, Lambda, Bedrock)",
+        "Docker",
+        "ArgoCD",
+        "GitHub Actions",
+        "SQL",
+      ],
     },
   ],
 };
