@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -15,6 +15,12 @@ export function ChatBox() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function fillPrompt(prompt: string) {
+    setInput(prompt);
+    inputRef.current?.focus();
+  }
 
   async function sendMessage(overrideQuestion?: string) {
     const question = (overrideQuestion ?? input).trim();
@@ -54,7 +60,7 @@ export function ChatBox() {
               <button
                 key={prompt}
                 type="button"
-                onClick={() => sendMessage(prompt)}
+                onClick={() => fillPrompt(prompt)}
                 style={{
                   border: "1px solid var(--border)",
                   borderRadius: 16,
@@ -90,6 +96,7 @@ export function ChatBox() {
       <div style={{ display: "flex", gap: "0.5rem" }}>
         <input
           id="chat-question"
+          ref={inputRef}
           value={input}
           onChange={(event) => setInput(event.target.value)}
           onKeyDown={(event) => {
