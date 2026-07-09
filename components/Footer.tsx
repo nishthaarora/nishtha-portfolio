@@ -5,7 +5,6 @@ export function Footer() {
     <footer
       style={{
         padding: "1.5rem",
-        marginTop: "2rem",
         borderTop: "1px solid var(--border)",
         textAlign: "center",
       }}

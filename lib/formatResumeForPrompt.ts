@@ -1,4 +1,5 @@
 import { resume } from "@/data/resume";
+import { projects } from "@/data/projects";
 
 export function formatResumeForPrompt(): string {
   const experience = resume.experience
@@ -17,6 +18,15 @@ export function formatResumeForPrompt(): string {
     .map((group) => `- ${group.category}: ${group.items.join(", ")}`)
     .join("\n");
 
+  const projectsSection = projects
+    .map(
+      (project) =>
+        `- ${project.title}: ${project.description}\n` +
+        project.highlights.map((h) => `  - ${h}`).join("\n") +
+        `\n  - Tech: ${project.tech.join(", ")}`
+    )
+    .join("\n");
+
   return [
     `# ${resume.name} — ${resume.title}`,
     "",
@@ -24,6 +34,9 @@ export function formatResumeForPrompt(): string {
     "",
     "## Experience",
     experience,
+    "",
+    "## Personal Projects",
+    projectsSection,
     "",
     "## Education",
     education,
