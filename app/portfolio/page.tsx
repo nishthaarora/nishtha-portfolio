@@ -1,6 +1,11 @@
 import { projects } from "@/data/projects";
 import { ProjectCard } from "@/components/ProjectCard";
 
+export const metadata = {
+  title: "Portfolio",
+  description: "Projects built by Nishtha Arora, including AI agents and developer tooling.",
+};
+
 export default function PortfolioPage() {
   return (
     <div>
