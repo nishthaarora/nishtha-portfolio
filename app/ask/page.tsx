@@ -18,7 +18,11 @@ export default function AskPage() {
           alt={resume.name}
           width={80}
           height={80}
-          style={{ borderRadius: "50%", objectFit: "cover" }}
+          style={{
+            borderRadius: "50%",
+            objectFit: "cover",
+            boxShadow: "0 0 0 3px var(--link)",
+          }}
         />
         <div>
           <h1 style={{ margin: 0 }}>Ask about {resume.name}</h1>

@@ -1,5 +1,6 @@
 :root {
   --bg: #ffffff;
+  --bg-gradient: linear-gradient(135deg, #f7f8fa 0%, #ffffff 60%, #f0f2f5 100%);
   --fg: #1a1a1a;
   --border: #e2e2e2;
   --card-bg: #ffffff;
@@ -10,19 +11,27 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #121212;
+    --bg-gradient: linear-gradient(135deg, #0a0e1a 0%, #12151f 55%, #1a1f2e 100%);
     --fg: #e8e8e8;
     --border: #333333;
-    --card-bg: #1c1c1c;
+    --card-bg: #181a20;
     --link: #6ab0ff;
     --input-bg: #1c1c1c;
   }
 }
 
+html,
+body {
+  min-height: 100vh;
+}
+
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: var(--bg);
+  background: var(--bg-gradient);
   color: var(--fg);
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -35,9 +44,23 @@ header {
 }
 
 main {
-  padding: 1.5rem;
-  max-width: 800px;
-  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+}
+
+main > * {
+  max-width: 700px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
 }
 
 input,
