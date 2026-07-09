@@ -5,13 +5,19 @@ export type ExperienceSection = {
   highlights: string[];
 };
 
+export type Position = {
+  title: string;
+  start: string;
+  end: string;
+};
+
 export type ResumeExperience = {
   title: string;
   company: string;
   location: string;
   start: string;
   end: string;
-  promotionNote?: string;
+  positions?: Position[];
   sections?: ExperienceSection[];
   highlights?: string[];
 };
@@ -121,7 +127,10 @@ export const resume: Resume = {
       location: "Remote",
       start: "September 2020",
       end: "February 2025",
-      promotionNote: "promoted from Frontend Developer, January 2024",
+      positions: [
+        { title: "Senior Software Engineer", start: "January 2024", end: "February 2025" },
+        { title: "Frontend Developer", start: "September 2020", end: "January 2024" },
+      ],
       highlights: [
         "Architected and owned the shared React component library used across 10+ product teams",
         "Rolled out Datadog RUM to establish real performance baselines across the platform — shifted the team from guesswork to data-driven decisions",

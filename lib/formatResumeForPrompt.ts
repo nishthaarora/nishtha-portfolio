@@ -4,9 +4,10 @@ import { projects } from "@/data/projects";
 export function formatResumeForPrompt(): string {
   const experience = resume.experience
     .map((job) => {
-      const header =
-        `- ${job.title} at ${job.company} (${job.start}–${job.end}, ${job.location})` +
-        (job.promotionNote ? ` [${job.promotionNote}]` : "");
+      const header = `- ${job.title} at ${job.company} (${job.start}–${job.end}, ${job.location})`;
+      const positions = job.positions
+        ? job.positions.map((p) => `  - ${p.title} (${p.start}–${p.end})`).join("\n") + "\n"
+        : "";
 
       if (job.sections) {
         const sections = job.sections
@@ -16,10 +17,10 @@ export function formatResumeForPrompt(): string {
               section.highlights.map((h) => `    - ${h}`).join("\n")
           )
           .join("\n");
-        return `${header}\n${sections}`;
+        return `${header}\n${positions}${sections}`;
       }
 
-      return `${header}\n${(job.highlights ?? []).map((h) => `  - ${h}`).join("\n")}`;
+      return `${header}\n${positions}${(job.highlights ?? []).map((h) => `  - ${h}`).join("\n")}`;
     })
     .join("\n");
 

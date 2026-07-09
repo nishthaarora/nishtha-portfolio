@@ -18,7 +18,7 @@
   :root {
     --bg: #121212;
     --bg-gradient: linear-gradient(135deg, #0a0e1a 0%, #12151f 55%, #1a1f2e 100%);
-    --fg: #e8e8e8;
+    --fg: #ededed;
     --border: #333333;
     --card-bg: #181a20;
     --link: #6ab0ff;
@@ -73,6 +73,19 @@ main > * {
   padding: 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
+}
+
+main > .resume-card {
+  max-width: 820px;
+}
+
+.prose {
+  max-width: 640px;
+}
+
+.prose p,
+.prose li {
+  line-height: 1.6;
 }
 
 input,
