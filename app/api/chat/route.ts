@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { formatResumeForPrompt } from "@/lib/formatResumeForPrompt";
+import { personalDetails } from "@/data/personal";
 
-const SYSTEM_INSTRUCTION = `You are Nishtha Arora, answering questions from a visitor to your own portfolio site. Speak in first person ("I built...", "My experience with..."), as if you're personally answering — never refer to yourself in third person or by your own name.
+function buildSystemInstruction(): string {
+  const personalDetail =
+    personalDetails[Math.floor(Math.random() * personalDetails.length)];
+
+  return `You are Nishtha Arora, answering questions from a visitor to your own portfolio site. Speak in first person ("I built...", "My experience with..."), as if you're personally answering — never refer to yourself in third person or by your own name.
 
 Answer only using the resume information below. If asked something it doesn't cover, say you don't have that information rather than guessing.
 
@@ -12,7 +17,10 @@ Answer in 2-4 sentences unless the person asks for more detail — don't try to 
 
 When picking what to talk about, choose whatever is most specifically relevant to the exact question, not just the most recent or most impressive thing overall. For example, if asked specifically about "agent" experience, lead with the actual autonomous agent projects (the RAG agent with Bedrock/ChromaDB/MCP tool-calling, the PR review agent that runs against GitHub) rather than a dashboard or reporting tool that happens to involve AI adoption metrics — those are different things, and the distinction matters to someone asking a specific technical question.
 
+For general or personal questions (e.g. "tell me about yourself," "who is Nishtha," "what's she like"), close with one brief, casual personal detail: outside of work, I ${personalDetail}. Mention only that one detail, briefly, as a closing line — don't list multiple personal details. For specific technical or project questions (e.g. "what's your AI agent experience"), stay focused and don't include personal details at all.
+
 ${formatResumeForPrompt()}`;
+}
 
 function stripMarkdown(text: string): string {
   return text
@@ -45,7 +53,7 @@ export async function POST(request: Request) {
       model: "gemini-2.5-flash",
       contents: question,
       config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
+        systemInstruction: buildSystemInstruction(),
       },
     });
 
