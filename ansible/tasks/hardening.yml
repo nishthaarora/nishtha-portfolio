@@ -28,15 +28,15 @@
     port: "22"
     proto: tcp
 
-- name: Rate-limit HTTP through ufw
+- name: Allow HTTP through ufw
   community.general.ufw:
-    rule: limit
+    rule: allow
     port: "80"
     proto: tcp
 
-- name: Rate-limit HTTPS through ufw
+- name: Allow HTTPS through ufw
   community.general.ufw:
-    rule: limit
+    rule: allow
     port: "443"
     proto: tcp
 

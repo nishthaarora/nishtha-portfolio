@@ -95,7 +95,9 @@ export const resume: Resume = {
           category: "Team Leadership",
           anchorId: "team-leadership",
           highlights: [
-            "Stepped in as acting manager, running sprint planning, backlog grooming, and retrospectives, and serving as the primary point of contact with product and design on feature scope and roadmap phases. Continue applying these leadership responsibilities today, alongside growth coaching for junior and mid-level engineers.",
+            "Stepped in as acting manager, owning sprint planning, backlog grooming, and retrospectives, driving team execution rhythm and surfacing technical risk early",
+            "Serve as the primary cross-functional point of contact with product and design, aligning feature scope and roadmap phases with engineering capacity",
+            "Coach junior engineers through structured growth paths, helping translate mentoring into measurable progress toward more senior scope",
           ],
         },
         {
