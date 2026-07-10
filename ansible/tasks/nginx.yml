@@ -18,6 +18,14 @@
       limit_req_zone $binary_remote_addr zone=chat_limit:10m rate=6r/m;
   notify: Reload nginx
 
+- name: Create the static media directory
+  file:
+    path: /opt/portfolio-media
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+
 - name: Configure Nginx as a reverse proxy to the app container
   copy:
     dest: /etc/nginx/sites-available/portfolio
@@ -25,6 +33,11 @@
       server {
           listen 80;
           server_name {{ site_domain }};
+
+          location /media/ {
+              limit_req zone=portfolio_limit burst=20 nodelay;
+              alias /opt/portfolio-media/;
+          }
 
           location /api/chat {
               limit_req zone=chat_limit burst=3 nodelay;
