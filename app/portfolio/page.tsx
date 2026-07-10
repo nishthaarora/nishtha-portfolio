@@ -1,5 +1,5 @@
 import { projects } from "@/data/projects";
-import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectTile } from "@/components/ProjectTile";
 
 export const metadata = {
   title: "Portfolio",
@@ -10,9 +10,15 @@ export default function PortfolioPage() {
   return (
     <div>
       <h1>Projects</h1>
-      <div style={{ display: "grid", gap: "1rem" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+          gap: "1rem",
+        }}
+      >
         {projects.map((project) => (
-          <ProjectCard key={project.title} project={project} />
+          <ProjectTile key={project.slug} project={project} />
         ))}
       </div>
     </div>

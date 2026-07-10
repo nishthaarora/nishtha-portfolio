@@ -1,4 +1,5 @@
 export type Project = {
+  slug: string;
   title: string;
   description: string;
   highlights: string[];
@@ -12,6 +13,7 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "nexus-hr-agent",
     title: "Nexus HR Agent",
     description:
       "An AI-powered internal operations assistant built with AWS Bedrock, RAG, and FastAPI. Ask questions about company documentation or create support tickets — the agent routes your request to the right skill automatically. Built to learn and mirror production RAG + agentic patterns, alongside studying a production Strands Agents + S3 Vectors system at work to understand every architectural decision by building a working equivalent.",
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     thumbnailAlt: "Nexus HR Agent architecture: chat UI to FastAPI, intent routing, RAG pipeline and ticket tool, Bedrock Converse API, MCP exposure and eval pipeline",
   },
   {
+    slug: "pr-review-agent",
     title: "PR Review Agent",
     description:
       "A daemon process that monitors GitHub notifications and automatically reviews eligible pull requests on each event.",

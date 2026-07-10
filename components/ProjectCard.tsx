@@ -12,7 +12,7 @@ export function ProjectCard({ project }: { project: Project }) {
         background: "var(--card-bg)",
       }}
     >
-      <h3>{project.title}</h3>
+      <h1>{project.title}</h1>
       <p>{project.description}</p>
 
       {project.videoUrl && (
