@@ -54,6 +54,8 @@ export const projects: Project[] = [
     ],
     tech: ["Python", "Claude SDK", "GitHub API", "Typer", "Pydantic"],
     link: "https://github.com/nishthaarora/pr-deep-review-bot",
+    thumbnailUrl: "/pr-deep-review-bot-architecture.png",
+    thumbnailAlt: "PR Deep Review Bot architecture: GitHub Action trigger, Haiku triage, parallel Sonnet specialists (cross-file breakage, security, architecture, test gaps, dependencies), Haiku synthesis, confidence-scored PR comments",
   },
   {
     slug: "pr-review-bot",
@@ -69,5 +71,7 @@ export const projects: Project[] = [
     ],
     tech: ["Node.js", "Express", "Ollama", "ChromaDB", "GitHub API"],
     link: "https://github.com/nishthaarora/pr-review-bot",
+    thumbnailUrl: "/pr-review-bot-architecture.png",
+    thumbnailAlt: "PR Review Bot architecture: GitHub PR into Express CLI, local Ollama models (deepseek-coder, qwen2.5-coder), ChromaDB context, priority scoring by severity tier, streaming review comments — all running locally",
   },
 ];
