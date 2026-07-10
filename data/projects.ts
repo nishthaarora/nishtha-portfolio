@@ -4,20 +4,26 @@ export type Project = {
   highlights: string[];
   tech: string[];
   link?: string;
+  videoUrl?: string;
+  videoCaption?: string;
 };
 
 export const projects: Project[] = [
   {
-    title: "AI Operations Agent",
+    title: "Nexus HR Agent",
     description:
-      "A full-stack AI agent built to learn and mirror production RAG patterns, built alongside studying a production Strands Agents + S3 Vectors system at work to understand every architectural decision by building a working equivalent.",
+      "An AI-powered internal operations assistant built with AWS Bedrock, RAG, and FastAPI. Ask questions about company documentation or create support tickets — the agent routes your request to the right skill automatically. Built to learn and mirror production RAG + agentic patterns, alongside studying a production Strands Agents + S3 Vectors system at work to understand every architectural decision by building a working equivalent.",
     highlights: [
-      "RAG pipeline: LangChain text splitters for chunking, Amazon Titan embeddings via Bedrock, ChromaDB as the local vector store — full document ingestion and semantic retrieval",
-      "Agent with tool calling: two-round-trip Bedrock format (initial call → tool invocation → second call with results). Two tools: search_docs (RAG retrieval) and create_ticket (mock Jira stub)",
-      "FastAPI backend with streaming responses; React chat frontend with real-time message rendering",
+      "RAG pipeline over fictional company documentation: LangChain chunking, Amazon Titan embeddings via Bedrock, ChromaDB as the vector store — full document ingestion and semantic retrieval",
+      "Agent with tool calling: two-round-trip Bedrock format (initial call → tool invocation → second call with results). Two tools: search_docs (RAG retrieval) and create_ticket (support ticket creation)",
+      "Intent-based skill routing (documentation vs. support), stateful multi-turn conversations with session persistence, and conversation summarization for long sessions",
+      "FastAPI backend with streaming responses; React + TypeScript + Tailwind chat frontend",
       "FastMCP stdio server — exposes the agent as an MCP-compatible tool for use with Claude Code or any MCP client",
+      "LLM-as-judge evaluation pipeline for measuring retrieval and response quality",
     ],
     tech: ["Python", "FastAPI", "React", "AWS Bedrock", "ChromaDB", "LangChain", "MCP"],
+    videoUrl: "/media/nexus-hr-eval-run.mp4",
+    videoCaption: "Eval run walkthrough — full product demo video coming soon",
   },
   {
     title: "PR Review Agent",
