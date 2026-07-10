@@ -17,7 +17,7 @@ export const projects: Project[] = [
       "RAG pipeline over fictional company documentation: LangChain chunking, Amazon Titan embeddings via Bedrock, ChromaDB as the vector store — full document ingestion and semantic retrieval",
       "Agent with tool calling: two-round-trip Bedrock format (initial call → tool invocation → second call with results). Two tools: search_docs (RAG retrieval) and create_ticket (support ticket creation)",
       "Intent-based skill routing (documentation vs. support), stateful multi-turn conversations with session persistence, and conversation summarization for long sessions",
-      "FastAPI backend with streaming responses; Next.js + React + TypeScript + Tailwind chat frontend",
+      "FastAPI backend; Next.js + React + TypeScript + Tailwind chat frontend",
       "FastMCP stdio server — exposes the agent as an MCP-compatible tool for use with Claude Code or any MCP client",
       "LLM-as-judge evaluation pipeline for measuring retrieval and response quality",
     ],
