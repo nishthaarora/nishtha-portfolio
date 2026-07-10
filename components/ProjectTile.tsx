@@ -3,7 +3,9 @@ import type { Project } from "@/data/projects";
 
 function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trimEnd() + "…";
+  const sliced = text.slice(0, maxLength);
+  const lastSpace = sliced.lastIndexOf(" ");
+  return (lastSpace > 0 ? sliced.slice(0, lastSpace) : sliced).trimEnd() + "…";
 }
 
 export function ProjectTile({ project }: { project: Project }) {
