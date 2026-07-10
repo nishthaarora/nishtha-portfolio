@@ -21,6 +21,7 @@ export function ProjectCard({ project }: { project: Project }) {
             src={project.videoUrl}
             controls
             preload="metadata"
+            poster={project.thumbnailUrl}
             style={{ width: "100%", borderRadius: 8, border: "1px solid var(--border)" }}
           />
           {project.videoCaption && (
@@ -28,6 +29,17 @@ export function ProjectCard({ project }: { project: Project }) {
               {project.videoCaption}
             </p>
           )}
+        </div>
+      )}
+
+      {!project.videoUrl && project.thumbnailUrl && (
+        <div style={{ margin: "1rem 0" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={project.thumbnailUrl}
+            alt={project.thumbnailAlt ?? `${project.title} architecture diagram`}
+            style={{ width: "100%", borderRadius: 8, border: "1px solid var(--border)" }}
+          />
         </div>
       )}
 

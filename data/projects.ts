@@ -6,6 +6,8 @@ export type Project = {
   link?: string;
   videoUrl?: string;
   videoCaption?: string;
+  thumbnailUrl?: string;
+  thumbnailAlt?: string;
 };
 
 export const projects: Project[] = [
@@ -25,6 +27,8 @@ export const projects: Project[] = [
     link: "https://github.com/nishthaarora/nexus-hr-agent",
     videoUrl: "https://pub-2706fb31198a415faeb07fa6f7006249.r2.dev/evals.mp4",
     videoCaption: "Eval run walkthrough — full product demo video coming soon",
+    thumbnailUrl: "/nexus-hr-agent-architecture.png",
+    thumbnailAlt: "Nexus HR Agent architecture: chat UI to FastAPI, intent routing, RAG pipeline and ticket tool, Bedrock Converse API, MCP exposure and eval pipeline",
   },
   {
     title: "PR Review Agent",
