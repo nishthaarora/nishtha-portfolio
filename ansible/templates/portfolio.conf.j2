@@ -1,0 +1,37 @@
+{% if cert_exists.stat.exists %}
+server {
+    listen 80;
+    server_name {{ site_domain }};
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name {{ site_domain }};
+
+    ssl_certificate {{ letsencrypt_dir }}/fullchain.pem;
+    ssl_certificate_key {{ letsencrypt_dir }}/privkey.pem;
+{% else %}
+server {
+    listen 80;
+    server_name {{ site_domain }};
+{% endif %}
+
+    location /api/chat {
+        limit_req zone=chat_limit burst=3 nodelay;
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        limit_req zone=portfolio_limit burst=20 nodelay;
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
