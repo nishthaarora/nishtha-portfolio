@@ -43,5 +43,7 @@ export const projects: Project[] = [
       "Configurable: branch skip lists, ignored authors, polling interval, permission mode",
     ],
     tech: ["Python", "Claude SDK", "GitHub API"],
+    thumbnailUrl: "/pr-review-agent-architecture.png",
+    thumbnailAlt: "PR Review Agent architecture: GitHub notifications to polling daemon, eligibility filter, pluggable AI provider, code review analysis, and inline PR comments",
   },
 ];
