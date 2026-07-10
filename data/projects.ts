@@ -40,17 +40,34 @@ export const projects: Project[] = [
     thumbnailAlt: "Nexus HR Agent architecture: chat UI to FastAPI, intent routing, RAG pipeline and ticket tool, Bedrock Converse API, MCP exposure and eval pipeline",
   },
   {
-    slug: "pr-review-agent",
-    title: "PR Review Agent",
+    slug: "pr-deep-review-bot",
+    title: "PR Deep Review Bot",
     description:
-      "A daemon process that monitors GitHub notifications and automatically reviews eligible pull requests on each event.",
+      "A multi-agent deep PR reviewer that catches cross-file breakage, security vulnerabilities, convention violations, test gaps, and dependency issues that single-pass reviewers miss. Built with claude-agent-sdk as a 3-phase pipeline: triage, parallel specialist analysis, and synthesis.",
     highlights: [
-      "Invokes Claude Code CLI as the AI provider; supports Gemini and Cursor as drop-in alternatives via config",
-      "Leaves inline PR comments — recommendations only, no approvals or blocks",
-      "Configurable: branch skip lists, ignored authors, polling interval, permission mode",
+      "3-phase pipeline: Triage (haiku, classifies risk and picks specialists) → Specialists (sonnet, run in parallel: cross-file breakage, security, architecture, test gaps, dependencies) → Synthesis (haiku, dedups and formats findings)",
+      "Confidence scoring: every finding gets a 0-100 score, with configurable per-category thresholds to filter noise",
+      "Dedup against existing PR comments using semantic matching, not just string comparison",
+      "Per-repo learnings stored in JSON — specialists receive past findings as context to avoid re-flagging known issues",
+      "GitHub Action triggers: on-demand via PR comment, or automatic on PR open/synchronize above a configurable changed-files threshold",
+      "External, versioned prompt templates — editable without code changes",
     ],
-    tech: ["Python", "Claude SDK", "GitHub API"],
-    thumbnailUrl: "/pr-review-agent-architecture.png",
-    thumbnailAlt: "PR Review Agent architecture: GitHub notifications to polling daemon, eligibility filter, pluggable AI provider, code review analysis, and inline PR comments",
+    tech: ["Python", "Claude SDK", "GitHub API", "Typer", "Pydantic"],
+    link: "https://github.com/nishthaarora/pr-deep-review-bot",
+  },
+  {
+    slug: "pr-review-bot",
+    title: "PR Review Bot",
+    description:
+      "A fully local AI PR review bot powered by Ollama — reviews pull requests from any GitHub repository without sending code to a cloud API. Built to explore what a private, self-hosted code review agent looks like end to end.",
+    highlights: [
+      "Runs entirely locally via Ollama (deepseek-coder / qwen2.5-coder) — no code leaves the machine",
+      "Priority scoring across severity tiers (critical/high/medium/low/style) with configurable minimum-severity filtering to reduce noise",
+      "Parallel file processing and incremental review support for faster turnaround on large PRs",
+      "Streaming responses from the model as review comments are generated",
+      "Simple CLI: point it at any owner/repo and PR number to review",
+    ],
+    tech: ["Node.js", "Express", "Ollama", "ChromaDB", "GitHub API"],
+    link: "https://github.com/nishthaarora/pr-review-bot",
   },
 ];
