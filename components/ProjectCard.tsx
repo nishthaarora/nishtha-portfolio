@@ -15,24 +15,22 @@ export function ProjectCard({ project }: { project: Project }) {
       <h1>{project.title}</h1>
       <p>{project.description}</p>
 
-      {project.videoUrl && (
-        <div style={{ margin: "1rem 0" }}>
+      {project.videos?.map((video, index) => (
+        <div key={video.url} style={{ margin: "1rem 0" }}>
           <video
-            src={project.videoUrl}
+            src={video.url}
             controls
             preload="metadata"
-            poster={project.thumbnailUrl}
+            poster={index === 0 ? project.thumbnailUrl : undefined}
             style={{ width: "100%", borderRadius: 8, border: "1px solid var(--border)" }}
           />
-          {project.videoCaption && (
-            <p style={{ opacity: 0.75, fontSize: "0.85rem", marginTop: "0.4rem" }}>
-              {project.videoCaption}
-            </p>
-          )}
+          <p style={{ opacity: 0.75, fontSize: "0.85rem", marginTop: "0.4rem" }}>
+            {video.caption}
+          </p>
         </div>
-      )}
+      ))}
 
-      {!project.videoUrl && project.thumbnailUrl && (
+      {!project.videos?.length && project.thumbnailUrl && (
         <div style={{ margin: "1rem 0" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

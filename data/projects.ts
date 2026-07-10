@@ -5,8 +5,7 @@ export type Project = {
   highlights: string[];
   tech: string[];
   link?: string;
-  videoUrl?: string;
-  videoCaption?: string;
+  videos?: { url: string; caption: string }[];
   thumbnailUrl?: string;
   thumbnailAlt?: string;
 };
@@ -27,8 +26,16 @@ export const projects: Project[] = [
     ],
     tech: ["Python", "FastAPI", "Next.js", "React", "AWS Bedrock", "ChromaDB", "LangChain", "MCP"],
     link: "https://github.com/nishthaarora/nexus-hr-agent",
-    videoUrl: "https://pub-2706fb31198a415faeb07fa6f7006249.r2.dev/evals.mp4",
-    videoCaption: "Live eval suite — 12 test cases scored against the RAG pipeline",
+    videos: [
+      {
+        url: "https://pub-2706fb31198a415faeb07fa6f7006249.r2.dev/nexus_hr_demo.mp4",
+        caption: "Product demo — the chat agent handling documentation Q&A and ticket creation",
+      },
+      {
+        url: "https://pub-2706fb31198a415faeb07fa6f7006249.r2.dev/evals.mp4",
+        caption: "How I validated it — live eval suite, 12 test cases scored against the RAG pipeline",
+      },
+    ],
     thumbnailUrl: "/nexus-hr-agent-architecture.png",
     thumbnailAlt: "Nexus HR Agent architecture: chat UI to FastAPI, intent routing, RAG pipeline and ticket tool, Bedrock Converse API, MCP exposure and eval pipeline",
   },
