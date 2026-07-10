@@ -22,7 +22,7 @@ export const projects: Project[] = [
       "LLM-as-judge evaluation pipeline for measuring retrieval and response quality",
     ],
     tech: ["Python", "FastAPI", "Next.js", "React", "AWS Bedrock", "ChromaDB", "LangChain", "MCP"],
-    videoUrl: "/media/nexus-hr-eval-run.mp4",
+    videoUrl: "https://pub-2706fb31198a415faeb07fa6f7006249.r2.dev/evals.mp4",
     videoCaption: "Eval run walkthrough — full product demo video coming soon",
   },
   {
