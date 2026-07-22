@@ -27,8 +27,8 @@ export function TabNav() {
                   padding: "0.4rem 1rem",
                   borderRadius: 6,
                   border: "1px solid var(--border)",
-                  background: isActive ? "var(--link)" : "var(--card-bg)",
-                  color: isActive ? "#ffffff" : "var(--fg)",
+                  background: isActive ? "var(--nav-active-bg)" : "var(--card-bg)",
+                  color: isActive ? "var(--nav-active-fg)" : "var(--fg)",
                   fontWeight: isActive ? "bold" : "normal",
                   textDecoration: "none",
                 }}
