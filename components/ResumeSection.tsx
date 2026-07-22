@@ -181,7 +181,7 @@ export function ResumeSection() {
             )}
           </div>
         </div>
-        </ li>
+        </li>
       ))}
       </ol>
 
