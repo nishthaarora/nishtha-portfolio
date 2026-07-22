@@ -46,7 +46,7 @@ export function ProjectTile({ project }: { project: Project }) {
         </div>
       )}
       <div style={{ padding: "1rem" }}>
-        <h3 style={{ margin: 0 }}>{project.title}</h3>
+        <h2 style={{ margin: 0 }}>{project.title}</h2>
         <p style={{ margin: "0.4rem 0 0", opacity: 0.85, fontSize: "0.9rem" }}>
           {truncate(project.description, 110)}
         </p>

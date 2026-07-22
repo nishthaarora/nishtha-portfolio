@@ -14,7 +14,7 @@ const SKILL_CATEGORY_COLOR: Record<string, string> = {
 
 function SectionHeading({ children }: { children: React.ReactNode }) {
   return (
-    <h3
+    <h2
       style={{
         textTransform: "uppercase",
         letterSpacing: "0.08em",
@@ -26,7 +26,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </h3>
+    </h2>
   );
 }
 
@@ -100,8 +100,10 @@ export function ResumeSection() {
       </p>
 
       <SectionHeading>Experience</SectionHeading>
+      <ol>
       {resume.experience.map((job, index) => (
-        <div key={`${job.company}-${job.title}`} style={{ display: "flex", gap: "1rem" }}>
+          <li key={`${job.company}-${job.title}`} style={{ marginBottom: "1.5rem", listStyle: "none" }}>
+        <div style={{ display: "flex", gap: "1rem" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div
               style={{
@@ -119,9 +121,9 @@ export function ResumeSection() {
           </div>
 
           <div className="prose" style={{ flex: 1, paddingBottom: "1.5rem" }}>
-            <div style={{ fontSize: "1.15rem", fontWeight: 700 }}>
+            <h3 style={{ fontSize: "1.15rem", fontWeight: 700 }}>
               {job.company}, {job.location}
-            </div>
+            </h3>
 
             {job.positions ? (
               <div style={{ marginTop: "0.5rem", marginBottom: "0.75rem" }}>
@@ -151,6 +153,7 @@ export function ResumeSection() {
                   </div>
                 ))}
               </div>
+              
             ) : (
               <div style={{ opacity: 0.75, marginBottom: "0.75rem" }}>
                 {job.title} · {job.start} – {job.end}
@@ -178,13 +181,15 @@ export function ResumeSection() {
             )}
           </div>
         </div>
+        </ li>
       ))}
+      </ol>
 
       <SectionHeading>AI &amp; Agent Projects</SectionHeading>
       <div className="prose">
         {projects.map((project) => (
           <div key={project.title} style={{ marginBottom: "1rem" }}>
-            <strong>{project.title}</strong> — {project.description}
+            <h3>{project.title}</h3> {project.description}
             <ul>
               {project.highlights.map((highlight) => (
                 <li key={highlight}>{boldKeyTerms(highlight)}</li>
@@ -197,7 +202,7 @@ export function ResumeSection() {
       <SectionHeading>Skills</SectionHeading>
       {resume.skills.map((group) => (
         <div key={group.category} style={{ marginBottom: "1rem" }}>
-          <div style={{ fontWeight: 600, marginBottom: "0.4rem" }}>{group.category}</div>
+          <h3 style={{ fontWeight: 600, marginBottom: "0.4rem" }}>{group.category}</h3>
           <div>
             {group.items.map((item) => (
               <Pill key={item} colorKey={SKILL_CATEGORY_COLOR[group.category]}>
