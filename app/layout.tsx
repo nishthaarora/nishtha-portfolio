@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     title: "Nishtha Arora — Senior Software Engineer",
     description: "Portfolio, resume, and projects for Nishtha Arora, Senior Software Engineer.",
     images: ["/og-image.png"],
-    url: "https://nishtha-portfolio-weld.vercel.app",
     siteName: "Nishtha Arora",
   },
   twitter: {
