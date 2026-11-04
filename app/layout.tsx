@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nishthaarora.duckdns.org"),
+  metadataBase: new URL("https://nishtha-portfolio-weld.vercel.app"),
   title: {
     default: "Nishtha Arora — Senior Software Engineer",
     template: "%s · Nishtha Arora",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Nishtha Arora — Senior Software Engineer",
     description: "Portfolio, resume, and projects for Nishtha Arora, Senior Software Engineer.",
     images: ["/og-image.png"],
-    url: "https://nishthaarora.duckdns.org",
+    url: "https://nishtha-portfolio-weld.vercel.app",
   },
   twitter: {
     card: "summary_large_image",
