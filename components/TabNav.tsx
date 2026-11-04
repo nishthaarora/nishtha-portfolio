@@ -16,7 +16,8 @@ export function TabNav() {
     <nav aria-label="Main">
       <ul style={{ display: "flex", gap: "0.75rem", listStyle: "none", padding: 0, margin: 0 }}>
         {TABS.map((tab) => {
-          const isActive = pathname === tab.href;
+          const isActive =
+            pathname === tab.href || (pathname === "/" && tab.href === "/resume");
           return (
             <li key={tab.href}>
               <Link
