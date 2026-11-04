@@ -18,6 +18,12 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.description,
+    openGraph: {
+      title: project.title,
+      description: project.description,
+      images: ["/og-image.png"],
+      siteName: "Nishtha Arora",
+    },
   };
 }
 
